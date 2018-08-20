@@ -91,7 +91,7 @@ $('.selectElement').on('click', function() {
 	}
 });
 
-$('.selectElement li').on('click', function() {
+$('.selectElement').on('click', 'li', function() {
 	$(this).parent().parent().children('.valueText').children('span').text($(this).text());
 
 	if ($(this).parent().parent().attr('id') == 'munForm') {
@@ -99,12 +99,19 @@ $('.selectElement li').on('click', function() {
 
 		html = '';
 		for (key in munObjData[$(this).text()]) {
-			html += '<li>' + key + '</li>';
+			html += '<li data-coord="[['
+			 + munObjData[$(this).text()][key].lat + ', '
+			 + munObjData[$(this).text()][key].lon + '], '
+			 + munObjData[$(this).text()][key].rad + ']">' + key + '</li>';
 		}
 
 		$('#munObj').children('ul').html(html);
 	} else {
-		//ymaps.ready(realoadMap());
+		console.log($(this).data('coord')[0][0]);
+		munObjGeo.geometry.setCoordinates($(this).data('coord')[0]);
+		myMap.setCenter($(this).data('coord')[0], 18, {
+    		checkZoomRange: true
+		});
 	}
 });
 
@@ -123,6 +130,7 @@ $(document).on('click', function(e) {
 ymaps.ready(init);
 
 var munObjGeo;
+var myMap;
 
 function init() {
 	munObjGeo = new ymaps.Circle([[64.527568, 40.592470], 30], { }, {
@@ -132,7 +140,7 @@ function init() {
        		strokeWidth: 2
        	});
 
-    var myMap = new ymaps.Map("map", {
+    myMap = new ymaps.Map("map", {
             center: [64.543235, 40.537195],
             zoom: 13
         }, {
