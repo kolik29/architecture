@@ -122,31 +122,23 @@ $(document).on('click', function(e) {
 
 ymaps.ready(init);
 
+var munObjGeo;
+
 function init() {
+	munObjGeo = new ymaps.Circle([[64.527568, 40.592470], 30], { }, {
+           	fillColor: "#DB709377",
+       		strokeColor: "#990066",
+       		strokeOpacity: 0.8,
+       		strokeWidth: 2
+       	});
+
     var myMap = new ymaps.Map("map", {
             center: [64.543235, 40.537195],
             zoom: 13
         }, {
             searchControlProvider: 'yandex#search'
         });
-}
 
-function realoadMap(lat, lon, rad) {
-    var myMap = new ymaps.Map("map", {
-            center: [lat, lon],
-            zoom: 19
-        }, {
-            searchControlProvider: 'yandex#search'
-        });
-
-   	myMap.geoObjects
-       	.add(new ymaps.Circle([[lat, lon], rad], { }, {
-           	fillColor: "#DB709377",
-       		// Цвет обводки.
-       		strokeColor: "#990066",
-       		// Прозрачность обводки.
-       		strokeOpacity: 0.8,
-       		// Ширина обводки в пикселях.
-       		strokeWidth: 2
-       	}));
+    myMap.geoObjects
+       	.add(munObjGeo);
 }
